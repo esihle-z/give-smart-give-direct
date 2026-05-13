@@ -169,6 +169,7 @@
     background-image: url('assets/images/jaylin.jpg');
     background-size: cover;
     background-position: center 15%;
+    min-height: 100vh;
     min-height: 100svh;
     color: var(--white);
     overflow: hidden;
@@ -198,6 +199,9 @@
   }
   @media (max-width: 980px) {
     .hero-grid { grid-template-columns: 1fr; padding: 56px 0 72px; gap: 36px; }
+  }
+  @media (max-width: 760px) {
+    .hero-content { padding: 40px 0 60px; max-width: 100%; }
   }
 
   .eyebrow {
