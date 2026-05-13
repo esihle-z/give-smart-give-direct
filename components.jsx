@@ -308,71 +308,42 @@ window.MiniQR = MiniQR;
 // Hero
 function Hero({ tw, openGive }) {
   return (
-    <section className="hero">
+    <section className="hero" id="hero">
       <div className="container">
-        <div className="hero-grid">
-          <div>
-            <span className="eyebrow"><span className="dot" /> Person to person · giving, with proof</span>
-            <h1 className="h1">
-              <span>Give Smart.</span>
-              <span className="accent with-rule">Give Direct.</span>
-            </h1>
-            <p className="hero-sub">
-              Scan a code. Support someone directly. Help restore dignity through
-              essentials that matter — a week of groceries, transport to work, school
-              shoes for a child.
-            </p>
-            <ol className="hero-steps" aria-label="How direct giving works">
-              <li><span className="s-n">01</span><span className="s-t">Scan a code</span></li>
-              <li><span className="s-n">02</span><span className="s-t">Support someone directly</span></li>
-              <li><span className="s-n">03</span><span className="s-t">Restore dignity through essentials</span></li>
-            </ol>
-
-            {tw.showTrust && (
-              <div className="trust-row">
-                <div className="trust-pill">
-                  <span className="ic"><Icon.Users /></span>
-                  <span className="lbl">Real people<span>Identity-verified neighbours</span></span>
-                </div>
-                <div className="trust-pill">
-                  <span className="ic"><Icon.Heart /></span>
-                  <span className="lbl">A direct gift<span>You choose what they need</span></span>
-                </div>
-                <div className="trust-pill">
-                  <span className="ic"><Icon.Shield /></span>
-                  <span className="lbl">Quiet proof<span>Receipts &amp; check-ins, on-chain</span></span>
-                </div>
-              </div>
-            )}
-
-            <DonationWidget accent={tw.accent} set={tw.amountSet} onGive={openGive} />
+        <div className="hero-content">
+          <span className="eyebrow"><span className="dot" /> Person to person · giving, with proof</span>
+          <h1 className="h1">
+            <span>Dignified giving.</span>
+            <span className="accent with-rule">Real impact.</span>
+          </h1>
+          <p className="hero-sub">
+            Scan a code. Support someone directly. Help restore dignity
+            through essentials that matter.
+          </p>
+          <div className="trust-icons">
+            <div className="trust-icon"><Icon.Shield size={28} /><span>Verified<br/>Recipients</span></div>
+            <div className="trust-icon"><Icon.Bag size={28} /><span>Essentials<br/>Only</span></div>
+            <div className="trust-icon"><Icon.Check size={28} /><span>Transparent<br/>& Trusted</span></div>
           </div>
-
-          <div className="recipient-wrap">
-            <div className="portrait">
-              <span className="label">VERIFIED · NOMSA M · CT</span>
-              <div className="silhouette">
-                <PortraitSilhouette tone="#84CC55" />
-              </div>
+          <DonationWidget accent={tw.accent} set={tw.amountSet} onGive={openGive} />
+        </div>
+      </div>
+      <div className="recipient-wrap">
+        <div className="recipient-card" role="group" aria-label="Verified recipient">
+          <div className="head">
+            <span className="badge-ic"><Icon.Check size={12} stroke="#0A2240" /></span>
+            Verified Support Recipient
+          </div>
+          <div className="body">
+            <div>
+              <h3 className="name">Jaylin Cecelia Nomdo</h3>
+              <p className="sub">Scan to support essentials</p>
             </div>
-
-            <div className="recipient-card" role="group" aria-label="Verified recipient">
-              <div className="head">
-                <span className="badge-ic"><Icon.Check size={12} stroke="#0A2240" /></span>
-                Verified Recipient
-              </div>
-              <div className="body">
-                <div>
-                  <h3 className="name">Nomsa M.</h3>
-                  <p className="sub">Mother of 3 · Khayelitsha<br/>Needs: groceries, school transport</p>
-                </div>
-                <QR />
-              </div>
-              <div className="foot">
-                <Icon.Sparkle size={14} className="hh" style={{ color: "#6DBE3F" }} />
-                <span><span className="hh">R 4,820</span> raised this month · 23 givers</span>
-              </div>
-            </div>
+            <QR />
+          </div>
+          <div className="foot">
+            <Icon.HeartFilled size={14} style={{ color: "var(--accent)" }} />
+            <span>Give smart. Give direct.</span>
           </div>
         </div>
       </div>
