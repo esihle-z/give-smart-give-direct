@@ -487,46 +487,37 @@ function CTABand({ open }) {
 
 function Footer() {
   return (
-    <footer>
+    <footer className="footer">
       <div className="container">
         <div className="foot-top">
-          <div>
-            <div className="brand" style={{ marginBottom: 14 }}>
-              <BrandLogo size={40} green="#6DBE3F" navy="#FFFFFF" />
-              <div className="brand-text">
-                <span className="t1" style={{ color: "#FFFFFF" }}>Give Smart.</span>
-                <span className="t2" style={{ color: "#6DBE3F" }}>Give Direct.</span>
-              </div>
+          <div className="foot-brand">
+            <BrandLogo size={38} />
+            <div className="brand-text" style={{marginTop:10}}>
+              <span className="t1">Give Smart.</span>
+              <span className="t2">Give Direct.</span>
+              <span className="t3" style={{marginTop:6,fontSize:13}}>Person to person giving, with proof.</span>
             </div>
-            <p style={{ fontSize: 14, maxWidth: 320, lineHeight: 1.55, margin: 0, color: "rgba(255,255,255,.6)" }}>
-              A direct-giving platform connecting people who want to help with people who need it — verified, transparent, on-chain.
-            </p>
           </div>
-          <div>
+          <div className="foot-col">
             <h4>Give</h4>
-            <a href="#">Browse recipients</a>
-            <a href="#">Monthly giving</a>
-            <a href="#">Gift cards</a>
-            <a href="#">Corporate</a>
+            <a href="#hero">Donate now</a>
+            <a href="#recipients">Browse recipients</a>
+            <a href="#how">How it works</a>
           </div>
-          <div>
+          <div className="foot-col">
             <h4>Trust</h4>
-            <a href="#">How verification works</a>
-            <a href="#">On-chain receipts</a>
-            <a href="#">Annual report</a>
-            <a href="#">Press</a>
+            <a href="#how">Verification</a>
+            <a href="#impact">Our impact</a>
           </div>
-          <div>
+          <div className="foot-col">
             <h4>Contact</h4>
-            <a href="#">Get in touch</a>
-            <a href="#">Apply as recipient</a>
-            <a href="#">Help center</a>
-            <a href="#">+27 21 000 0000</a>
+            <a href="mailto:hello@givesmartgivedirect.co.za">hello@givesmartgivedirect.co.za</a>
+            <a href="#hero">Apply as recipient</a>
           </div>
         </div>
         <div className="foot-bottom">
-          <span>© 2026 Give Smart, NPC · Cape Town, South Africa</span>
-          <span><span className="hh">PBO 930-xxxx-xx</span> · Section 18A receipts available</span>
+          <span>© 2026 Give Smart. Give Direct. · Cape Town, South Africa</span>
+          <span>givesmartgivedirect.co.za · Section 18A receipts available</span>
         </div>
       </div>
     </footer>
