@@ -8,7 +8,16 @@ Give Smart. Give Direct. (`givesmartgivedirect.co.za`) is a South African direct
 
 ## Running the app
 
-Open `Homepage.html` directly in a browser. There is no dev server or build process. All React/Babel is loaded via CDN from within the HTML file. Changes to `app.jsx`, `components.jsx`, `icons.jsx`, or `tweaks-panel.jsx` are picked up on reload.
+**You must serve over HTTP — `file://` won't work.** Babel-standalone fetches the `.jsx` files via `fetch()`, which is blocked under `file://`. From the project root:
+
+```bash
+python3 -m http.server 3333
+# then open http://localhost:3333/Homepage.html
+```
+
+If port 3333 is busy: `lsof -ti :3333 | xargs kill -9` then restart.
+
+All React/Babel is loaded via CDN from within the HTML file. Changes to `app.jsx`, `components.jsx`, `icons.jsx`, or `tweaks-panel.jsx` are picked up on hard-reload (Cmd+Shift+R) — no build step.
 
 ## Verifying the profile
 
@@ -20,14 +29,24 @@ This checks that all required `.agent/skills/*/SKILL.md` files exist, have valid
 
 ## Architecture
 
-All source files are loaded as `<script type="text/babel">` tags in `Homepage.html` in this order:
+`Homepage.html` uses a **custom async JSX loader** (inline `<script>` near the end of `<body>`) that `fetch`es each `.jsx` file, transpiles via `Babel.transform`, then `eval`s with `//# sourceURL=` for real stack traces. This replaces the default `<script type="text/babel" src="...">` mechanism, which sanitises errors as cross-origin "Script error." and makes blank-page debugging impossible.
 
-1. `icons.jsx` — SVG icon components
-2. `tweaks-panel.jsx` — `TweaksPanel` + `useTweaks` hook for live design tweaks (dev only)
-3. `components.jsx` — all page section components (`Hero`, `Story`, `HowItWorks`, `Impact`, `Gratitude`, `Recipients`, `LiveFeed`, `GiveModal`, `DonationWidget`, etc.)
-4. `app.jsx` — root `App` component wiring sections together; `Nav` is also defined here
+Files load in this order (matches the loader, not the script tag order):
+
+1. `tweaks-panel.jsx` — `TweaksPanel` + `useTweaks` hook for live design tweaks (dev only); exports to `window`
+2. `icons.jsx` — defines `Icon` map and `BrandLogo`; assigned to `window.Icon` / `window.BrandLogo`
+3. `components.jsx` — all page section components; ends with `Object.assign(window, { ... })`
+4. `app.jsx` — root `App` and `Nav`; ends with `ReactDOM.createRoot(...).render(<App />)`
 
 Global state flows from `App` via props. `useTweaks` drives live design variables (accent colour, navy, donation amount presets, hero layout variant) which are applied as CSS custom properties on `document.documentElement`.
+
+### Scope rules (Babel-standalone)
+
+Top-level `function` declarations in a transpiled script become global automatically. Top-level `const`/`let` do not — they must be explicitly assigned to `window` to be visible from another file. That's why `icons.jsx` does `window.Icon = Icon` (it's a `const`) but `components.jsx`'s `Object.assign(window, { Hero, Story, ... })` is partly decorative for the functions but still useful documentation of what crosses the file boundary.
+
+### Error overlay
+
+`Homepage.html` injects `<div id="__err">` and a `window.error` handler near the top of `<body>`. Any uncaught error or promise rejection shows as a red banner at the top of the page with the file, line, and stack. Keep this in until production deploy.
 
 ### Key globals in `Homepage.html`
 
@@ -53,6 +72,22 @@ A floating dev panel rendered by `TweaksPanel` (from `tweaks-panel.jsx`). Activa
 | Mono font | JetBrains Mono (labels, tags) |
 
 CSS custom properties `--accent` and `--navy-900` are overridden at runtime by the tweaks system.
+
+## Verification before claiming "done"
+
+Spec-text review alone is **not enough** for this codebase. A subagent comparing rendered JSX against a spec cannot see the difference between `"` (U+0022) and `"` / `"` (U+201C / U+201D) — they're visually identical in most fonts but Babel rejects the curly ones. This bit us once: Task 5 introduced curly quotes in `Story`'s JSX and the page rendered blank for the rest of the implementation pass.
+
+Run these against every changed `.jsx` file before declaring a task complete:
+
+```bash
+# 1. Curly-quote / non-ASCII smart-punctuation check
+grep -nP '[\x{201C}\x{201D}\x{2018}\x{2019}]' app.jsx components.jsx icons.jsx tweaks-panel.jsx
+
+# 2. Babel syntax-parse (requires @babel/core + @babel/preset-react locally)
+node -e "require('@babel/core').parseSync(require('fs').readFileSync('components.jsx','utf8'), {presets:['@babel/preset-react']})"
+```
+
+Better still: keep the HTTP server running and hard-reload after every commit. Blank page = open DevTools first, not speculate.
 
 ## Agent workflow (`.agent/`)
 
