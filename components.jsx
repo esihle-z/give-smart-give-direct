@@ -374,28 +374,28 @@ function Hero({ tw, openGive }) {
 // Story section
 function Story() {
   return (
-    <section className=”section tint” id=”story”>
-      <div className=”container”>
-        <div className=”story-grid”>
+    <section className="section tint" id="story">
+      <div className="container">
+        <div className="story-grid">
           <div>
-            <span className=”micro”>Real people. Real possibilities.</span>
-            <h2 className=”h2”>Help someone transform their life.</h2>
-            <p className=”lede”>
+            <span className="micro">Real people. Real possibilities.</span>
+            <h2 className="h2">Help someone transform their life.</h2>
+            <p className="lede">
               Jaylin is just one of the many kids from Nectar Road informal settlement
               community, whose homes were destroyed by the recent storm. Your support
               helps them rebuild their homes and restore dignity.
             </p>
-            <p className=”smallact” style={{color:”var(--accent-strong)”,fontWeight:700,marginTop:20}}>
+            <p className="smallact" style={{color:"var(--accent-strong)",fontWeight:700,marginTop:20}}>
               Small acts. Big change.
             </p>
-            <a href=”#how” className=”btn btn-primary btn-lg” style={{marginTop:24,display:”inline-flex”,gap:10}}>
+            <a href="#how" className="btn btn-primary btn-lg" style={{marginTop:24,display:"inline-flex",gap:10}}>
               See how it works <Icon.ArrowRight />
             </a>
           </div>
-          <div className=”story-photo”>
-            <img src=”assets/images/jaylin.jpg” alt=”Jaylin Cecelia Nomdo” />
-            <div className=”story-quote-pill”>
-              <span style={{color:”var(--accent)”,fontWeight:800,fontSize:28,lineHeight:.6,marginTop:6}}>”</span>
+          <div className="story-photo">
+            <img src="assets/images/jaylin.jpg" alt="Jaylin Cecelia Nomdo" />
+            <div className="story-quote-pill">
+              <span style={{color:"var(--accent)",fontWeight:800,fontSize:28,lineHeight:.6,marginTop:6}}>"</span>
               <p style={{margin:0,fontSize:15,lineHeight:1.45,fontWeight:500}}>
                 Thank you for seeing me, not just my situation.
               </p>
