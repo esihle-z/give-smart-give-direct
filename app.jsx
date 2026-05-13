@@ -7,23 +7,14 @@ function Nav({ openGive }) {
         <div className="brand">
           <BrandLogo size={42} />
           <div className="brand-text">
-            <span className="t1">Give Smart.</span>
-            <span className="t2">Give Direct.</span>
-            <span className="t3">Verified · Transparent · On-chain</span>
+            <span className="t1">Give smart</span>
+            <span className="t2">Give direct.</span>
+            <span className="t3">givesmartgivedirect.co.za</span>
           </div>
         </div>
-        <nav className="nav-links">
-          <a className="active" href="#">Home</a>
-          <a href="#recipients">Recipients</a>
-          <a href="#how">How it works</a>
-          <a href="#">Our story</a>
-          <a href="#">Contact</a>
-        </nav>
         <div className="nav-cta">
-          <button className="btn btn-ghost">Sign in</button>
-          <button className="btn btn-green" onClick={openGive}>
-            <Icon.HeartFilled size={16} /> Give now
-          </button>
+          <button className="btn btn-primary" onClick={openGive} id="nav-donate-btn">Donate</button>
+          <button className="menu-icon" aria-label="Menu"><Icon.Menu size={20} /></button>
         </div>
       </div>
     </header>
