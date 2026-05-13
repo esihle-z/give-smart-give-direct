@@ -1210,6 +1210,27 @@
     display: grid; place-items: center;
   }
 
+  /* ============ TOAST ============ */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 14px 24px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 200;
+    box-shadow: var(--shadow-lg);
+  }
+  .toast-success { background: var(--accent); color: var(--white); }
+  .toast-error   { background: #D9476A; color: var(--white); }
+  .toast-info    { background: var(--navy-900); color: var(--white); }
+  .toast button  { background: transparent; color: inherit; border: 0; font-size: 18px; cursor: pointer; line-height: 1; }
+
   /* nav hide on small */
   @media (max-width: 760px) {
     .nav-links { display: none; }
@@ -1223,6 +1244,18 @@
 <div id="app"></div>
 
 <script>
+  window.GATEWAY_CONFIG = {
+    provider: "ozow",
+    siteCode:   "YOUR_OZOW_SITE_CODE",
+    privateKey: "YOUR_OZOW_PRIVATE_KEY",
+    countryCode: "ZA",
+    currencyCode: "ZAR",
+    isTest: true,
+    successUrl: window.location.origin + "/?payment=success",
+    errorUrl:   window.location.origin + "/?payment=error",
+    cancelUrl:  window.location.origin + "/?payment=cancelled",
+  };
+
   // Tweakable defaults (editable on disk)
   window.__TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
     "accent": "#6DBE3F",

@@ -1,3 +1,27 @@
+async function buildOzowUrl({ amount, mode }) {
+  const cfg = window.GATEWAY_CONFIG;
+  const ref = "GSGD-" + Date.now();
+  const bankRef = "JAYLIN001-" + ref.slice(-6);
+  const hashInput = [
+    cfg.siteCode, cfg.countryCode, cfg.currencyCode,
+    amount.toFixed(2), bankRef, ref,
+    cfg.successUrl, cfg.errorUrl, cfg.cancelUrl,
+    cfg.isTest ? "true" : "false", cfg.privateKey
+  ].join("").toLowerCase();
+  const buf = await crypto.subtle.digest("SHA-512", new TextEncoder().encode(hashInput));
+  const hashCheck = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,"0")).join("");
+  const params = new URLSearchParams({
+    SiteCode: cfg.siteCode, CountryCode: cfg.countryCode,
+    CurrencyCode: cfg.currencyCode, Amount: amount.toFixed(2),
+    TransactionReference: ref, BankRef: bankRef,
+    SuccessUrl: cfg.successUrl, ErrorUrl: cfg.errorUrl,
+    CancelUrl: cfg.cancelUrl, IsTest: String(cfg.isTest),
+    HashCheck: hashCheck,
+    ...(mode === "monthly" ? { Optional1: "monthly-recurring" } : {}),
+  });
+  return `https://pay.ozow.com/?${params.toString()}`;
+}
+
 // Silhouettes used as tasteful placeholders for portrait photography.
 // Drawn in a flat, dignified style — meant to be replaced with real imagery.
 function PortraitSilhouette({ tone = "#6DBE3F" }) {
@@ -526,39 +550,37 @@ function Footer() {
 
 // Modal for the give flow
 function GiveModal({ details, onClose }) {
-  const [step, setStep] = React.useState(1);
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
   if (!details) return null;
 
+  const handlePay = async () => {
+    setLoading(true);
+    try {
+      const url = await buildOzowUrl({ amount: details.amount || 50, mode: details.mode });
+      window.location.href = url;
+    } catch(e) {
+      alert("Could not start payment. Please try again.");
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="modal-back" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+    <div className="modal-back" onClick={e => e.target === e.currentTarget && onClose()}>
       <div className="modal" role="dialog" aria-modal="true">
         <button className="x" onClick={onClose}><Icon.Close /></button>
-        {step === 1 && (
-          <>
-            <h3>Confirm your gift</h3>
-            <p>You're giving to Nomsa M. and her family.</p>
-            <div className="summary">
-              <span className="lbl">{details.mode === "monthly" ? "Monthly gift" : "One-time gift"}</span>
-              <span className="amt">R{Number(details.amount || 0).toLocaleString()}{details.mode === "monthly" ? " /mo" : ""}</span>
-            </div>
-            <div className="field"><label>Your name</label><input placeholder="So Nomsa can thank you" defaultValue="" /></div>
-            <div className="field"><label>Email for receipt</label><input placeholder="you@email.co.za" /></div>
-            <button className="give-btn" onClick={() => setStep(2)}>
-              <Icon.Lock /> Continue to payment <Icon.ArrowRight />
-            </button>
-          </>
-        )}
-        {step === 2 && (
-          <div className="modal-success">
-            <div className="ok-ic"><Icon.Check size={36} /></div>
-            <h3>Thank you.</h3>
-            <p style={{ textAlign: "center" }}>
-              Your gift of <strong>R{Number(details.amount || 0).toLocaleString()}{details.mode === "monthly" ? " /month" : ""}</strong> is on its way to Nomsa.
-              We'll email a receipt and a check-in within 7 days.
-            </p>
-            <button className="give-btn" onClick={onClose}>Done</button>
-          </div>
-        )}
+        <h3>Confirm your gift</h3>
+        <p>You're giving to Jaylin and the Nectar Road community.</p>
+        <div className="summary">
+          <span className="lbl">{details.mode === "monthly" ? "Monthly gift" : "One-time gift"}</span>
+          <span className="amt">R{Number(details.amount||0).toLocaleString()}{details.mode==="monthly"?" /mo":""}</span>
+        </div>
+        <div className="field"><label>Your name</label><input placeholder="So Jaylin can thank you" value={name} onChange={e=>setName(e.target.value)} /></div>
+        <div className="field"><label>Email for receipt</label><input placeholder="you@email.co.za" value={email} onChange={e=>setEmail(e.target.value)} /></div>
+        <button className="give-btn" onClick={handlePay} disabled={loading}>
+          {loading ? "Redirecting…" : <><Icon.Lock /> Continue to payment <Icon.ArrowRight /></>}
+        </button>
       </div>
     </div>
   );

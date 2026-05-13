@@ -38,6 +38,14 @@ function App() {
     document.body.classList.toggle("hero-stacked", tw.heroVariant === "stacked");
   }, [tw.heroVariant]);
 
+  const [paymentMsg, setPaymentMsg] = React.useState(null);
+  React.useEffect(() => {
+    const p = new URLSearchParams(window.location.search).get("payment");
+    if (p === "success") setPaymentMsg({ type: "success", text: "Thank you! Your gift is on its way." });
+    else if (p === "error") setPaymentMsg({ type: "error", text: "Payment failed. Please try again." });
+    else if (p === "cancelled") setPaymentMsg({ type: "info", text: "Payment cancelled." });
+  }, []);
+
   const openGive = (details) => {
     if (details && typeof details === "object" && details.amount != null) {
       setGiveDetails(details);
@@ -61,6 +69,13 @@ function App() {
       <Footer />
 
       {giveDetails && <GiveModal details={giveDetails} onClose={() => setGiveDetails(null)} />}
+
+      {paymentMsg && (
+        <div className={"toast toast-" + paymentMsg.type} role="alert">
+          {paymentMsg.text}
+          <button onClick={() => setPaymentMsg(null)}>✕</button>
+        </div>
+      )}
 
       <TweaksPanel title="Tweaks">
         <TweakSection label="Brand">
