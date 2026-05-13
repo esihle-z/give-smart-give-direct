@@ -560,5 +560,6 @@ function GiveModal({ details, onClose }) {
 }
 
 Object.assign(window, {
-  Hero, Story, HowItWorks, Impact, CTABand, Footer, GiveModal, DonationWidget, QR, PortraitSilhouette, StoryPortrait
+  Hero, Story, HowItWorks, Impact, CTABand, Footer, GiveModal, DonationWidget, QR, PortraitSilhouette, StoryPortrait,
+  LiveFeed, Recipients, Gratitude
 });
