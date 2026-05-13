@@ -253,16 +253,16 @@ function Recipients({ openGive }) {
 function Gratitude() {
   const notes = [
     {
-      q: "I bought groceries this Saturday with my children. They didn't ask why — just smiled. Thank you, friend I haven't met.",
-      who: "Nomsa M.", where: "Khayelitsha", initials: "NM", tag: "Groceries",
+      q: "I bought groceries this week for the first time since the storm. My children didn't ask why — just smiled. Thank you, friend I haven't met.",
+      who: "Nomsa M.", where: "Nectar Road", initials: "NM", tag: "Groceries",
     },
     {
       q: "My son got to school every day this month. The taxi driver knows him by name now. We are so grateful.",
-      who: "Lindiwe T.", where: "Soweto", initials: "LT", tag: "Transport",
+      who: "Lindiwe T.", where: "Nectar Road", initials: "LT", tag: "Transport",
     },
     {
-      q: "I could call my daughter at university for the first time in weeks. Such a small thing, but it kept me whole.",
-      who: "Mama Joyce", where: "Mamelodi", initials: "MJ", tag: "Airtime",
+      q: "We are rebuilding, brick by brick. Knowing someone cares makes it possible to keep going.",
+      who: "Mama Joyce", where: "Nectar Road", initials: "MJ", tag: "Rebuilding",
     },
   ];
   return (
