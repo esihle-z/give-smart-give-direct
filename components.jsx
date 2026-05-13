@@ -74,17 +74,13 @@ function QR() {
 
 // Donation widget — controlled component
 function DonationWidget({ accent, set = "standard", onGive }) {
-  const presets = set === "high"
-    ? [100, 250, 500, 1000]
-    : set === "small"
-    ? [20, 50, 100, 200]
-    : [50, 100, 250, 500];
+  const presets = [10, 20, 50];
 
   const [mode, setMode] = React.useState("monthly"); // once | monthly
-  const [amount, setAmount] = React.useState(presets[1]);
+  const [amount, setAmount] = React.useState(presets[2]);
   const [custom, setCustom] = React.useState("");
 
-  React.useEffect(() => { setAmount(presets[1]); setCustom(""); }, [set]);
+  React.useEffect(() => { setAmount(presets[2]); setCustom(""); }, [set]);
 
   const effectiveAmount = custom ? Number(custom) : amount;
 
