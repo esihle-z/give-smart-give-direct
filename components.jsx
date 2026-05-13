@@ -441,38 +441,24 @@ function Counter({ to, prefix = "", suffix = "" }) {
 }
 
 function Impact() {
+  const pillars = [
+    { ic: <Icon.Users />,  n: "100%",      l: "of donations go to essentials" },
+    { ic: <Icon.Shield />, n: "Verified",  l: "recipients through trusted partners" },
+    { ic: <Icon.Heart />,  n: "Dignity",   l: "preserved through choice, not charity" },
+    { ic: <Icon.Chart />,  n: "Real Impact", l: "transparent, trackable and accountable" },
+  ];
   return (
-    <section className="section dark">
+    <section className="section dark" id="impact">
       <div className="container">
-        <div className="impact-head">
-          <span className="micro">The dignity we've restored, together</span>
-          <h2 className="h2">Real lives, lifted.</h2>
-        </div>
+        <span className="micro" style={{color:"var(--accent)"}}>Together, we create impact</span>
         <div className="impact-grid">
-          <div className="stat">
-            <div className="ic"><Icon.Users /></div>
-            <div className="n"><Counter to={847} /></div>
-            <div className="l">Families supported</div>
-            <div className="d">Across 14 communities, person to person</div>
-          </div>
-          <div className="stat">
-            <div className="ic"><Icon.Bag /></div>
-            <div className="n"><Counter to={28640} /></div>
-            <div className="l">Meals on tables</div>
-            <div className="d">Groceries delivered, not promised</div>
-          </div>
-          <div className="stat">
-            <div className="ic"><Icon.Phone /></div>
-            <div className="n"><Counter to={12300} /></div>
-            <div className="l">School days protected</div>
-            <div className="d">Transport, uniforms, fees — covered</div>
-          </div>
-          <div className="stat">
-            <div className="ic"><Icon.Sparkle /></div>
-            <div className="n"><Counter to={3219} /></div>
-            <div className="l">Givers like you</div>
-            <div className="d">Quietly doing right, this month</div>
-          </div>
+          {pillars.map(p => (
+            <div className="impact-item" key={p.n}>
+              <div className="impact-ic">{p.ic}</div>
+              <div className="n" style={p.n.length > 4 ? {fontSize:28} : {}}>{p.n}</div>
+              <div className="l">{p.l}</div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
