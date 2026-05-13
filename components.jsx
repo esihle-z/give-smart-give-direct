@@ -437,33 +437,6 @@ function HowItWorks() {
   );
 }
 
-// Animated counter
-function Counter({ to, prefix = "", suffix = "" }) {
-  const [n, setN] = React.useState(0);
-  const ref = React.useRef(null);
-  React.useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) {
-        const start = performance.now();
-        const dur = 1400;
-        const step = (t) => {
-          const k = Math.min(1, (t - start) / dur);
-          const eased = 1 - Math.pow(1 - k, 3);
-          setN(Math.floor(to * eased));
-          if (k < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-        io.disconnect();
-      }
-    }, { threshold: 0.3 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, [to]);
-  return <span ref={ref}>{prefix}{n.toLocaleString()}{suffix}</span>;
-}
-
 function Impact() {
   const pillars = [
     { ic: <Icon.Users />,  n: "100%",      l: "of donations go to essentials" },
