@@ -386,10 +386,10 @@ function Story() {
 // How it works
 function HowItWorks() {
   const steps = [
-    { ic: <Icon.Users />, n: 1, t: "Browse verified recipients", d: "Real people, identity-checked. See exactly what each person needs this week." },
-    { ic: <Icon.Heart />,  n: 2, t: "Choose what you fund", d: "Groceries. Transport. Airtime. School fees. You pick the category, not just the amount." },
-    { ic: <Icon.Bag />,    n: 3, t: "We buy on their behalf", d: "Funds route directly to the retailer or service. The recipient receives what was promised." },
-    { ic: <Icon.Chart />,  n: 4, t: "Track every transaction", d: "On-chain receipts, photos, and check-ins. Your impact is visible, not just promised." },
+    { ic: <Icon.Users />, n: 1, t: "Scan",    d: "Scan the QR code on the card." },
+    { ic: <Icon.Heart />, n: 2, t: "Donate",  d: "Choose an amount and donate securely." },
+    { ic: <Icon.Bag />,   n: 3, t: "Support", d: "Your donation funds essentials for them." },
+    { ic: <Icon.Shield />,n: 4, t: "Redeem",  d: "They shop for what they truly need." },
   ];
   return (
     <section className="section" id="how">
