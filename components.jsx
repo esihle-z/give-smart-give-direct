@@ -51,7 +51,50 @@ function QR() {
 }
 
 // ── Section components (filled in later tasks) ────────────────────────────
-function Hero({ openGive }) { return <section className="hero" id="hero" />; }
+function Hero({ openGive }) {
+  return (
+    <section className="hero" id="hero">
+      <div className="hero-photo">
+        <img src="assets/images/jaylin.jpg" alt="Jaylin Cecelia Nomdo" />
+        <div className="hero-photo-grade" />
+      </div>
+      <div className="hero-inner">
+        <div className="container">
+          <div className="hero-copy">
+            <span className="kicker">Person to person · giving, with proof</span>
+            <h1 className="h1">
+              Dignified giving. <span className="accent">Real impact.</span>
+            </h1>
+            <p className="hero-sub">
+              Scan a code. Support someone directly. Help restore dignity through essentials that matter.
+            </p>
+            <div className="hero-actions">
+              <button className="btn btn-green btn-lg" onClick={() => openGive()}>
+                <Icon.HeartFilled /> Give now <Icon.ArrowRight />
+              </button>
+              <a className="btn btn-ghost-light btn-lg" href="#story">
+                Read Jaylin's story
+              </a>
+            </div>
+            <div className="hero-meta">
+              <span>47 supporters</span>
+              <span className="dot-sep" />
+              <span>R12,800 raised</span>
+              <span className="dot-sep" />
+              <span>of R40,000 goal</span>
+            </div>
+            <div className="hero-bar">
+              <div className="hero-bar-fill" style={{ width: "32%" }} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <a className="hero-scroll" href="#story" aria-label="Scroll to story">
+        <span />
+      </a>
+    </section>
+  );
+}
 function Story() { return <section className="section tint" id="story" />; }
 function HowItWorks() { return <section className="section" id="how" />; }
 function GiveSection({ openGive }) { return <section className="section give-section" id="give" />; }
