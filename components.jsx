@@ -172,11 +172,91 @@ function HowItWorks() {
     </section>
   );
 }
-function GiveSection({ openGive }) { return <section className="section give-section" id="give" />; }
+function GiveSection({ openGive }) {
+  const benefits = [
+    "100% goes to essentials",
+    "Verified recipient",
+    "Section 18A tax receipt",
+    "Cancel anytime",
+  ];
+  return (
+    <section className="section give-section" id="give">
+      <div className="container">
+        <div className="give-grid">
+          <div>
+            <span className="micro">Make it count</span>
+            <h2 className="h2" style={{ marginTop: 18 }}>Give to Jaylin.</h2>
+            <p className="lede" style={{ marginTop: 22 }}>
+              Your gift goes directly to the essentials Jaylin and the Nectar Road community need this week. Verified, transparent, and 100% theirs.
+            </p>
+            <ul className="give-list">
+              {benefits.map(b => (
+                <li key={b}><Icon.Check size={16} /> {b}</li>
+              ))}
+            </ul>
+          </div>
+          <DonationCard openGive={openGive} />
+        </div>
+      </div>
+    </section>
+  );
+}
 function Impact() { return <section className="section dark" id="impact" />; }
 function CTABand({ openGive }) { return <section className="cta-band" />; }
 function Footer() { return <footer />; }
-function DonationCard({ openGive }) { return <div className="donation-card" />; }
+function DonationCard({ openGive }) {
+  const presets = [10, 20, 50];
+  const [mode, setMode] = React.useState("monthly");
+  const [amount, setAmount] = React.useState(50);
+  const [custom, setCustom] = React.useState("");
+  const effective = custom ? Number(custom) : amount;
+
+  return (
+    <div className="donation-card">
+      <div className="don-head">
+        <span className="don-eyebrow">Your gift</span>
+      </div>
+      <div className="seg" role="tablist">
+        <button className={mode === "once" ? "active" : ""} onClick={() => setMode("once")}>Give once</button>
+        <button className={mode === "monthly" ? "active" : ""} onClick={() => setMode("monthly")}>Monthly</button>
+      </div>
+      <div className="amounts" style={{ marginTop: 12 }}>
+        {presets.map(p => (
+          <button
+            key={p}
+            className={"amount " + (!custom && amount === p ? "active" : "")}
+            onClick={() => { setAmount(p); setCustom(""); }}
+          >R{p}</button>
+        ))}
+        <button
+          className={"amount " + (custom ? "active" : "")}
+          onClick={() => { setCustom(amount + ""); }}
+        >Other</button>
+      </div>
+      <div className="custom-amount" style={{ marginTop: 8 }}>
+        <span>R</span>
+        <input
+          type="text"
+          inputMode="numeric"
+          placeholder="Other amount"
+          value={custom}
+          onChange={e => setCustom(e.target.value.replace(/[^0-9]/g, ""))}
+        />
+      </div>
+      <button
+        className="give-btn"
+        onClick={() => openGive({ amount: effective || 0, mode })}
+      >
+        <Icon.Lock /> Continue to payment <Icon.ArrowRight />
+      </button>
+      <div className="secure-row">
+        <span className="b"><Icon.Lock size={12} /> Secure checkout</span>
+        <span className="dvd">·</span>
+        <span className="b"><Icon.Shield size={12} /> 100% to recipients</span>
+      </div>
+    </div>
+  );
+}
 function GiveModal({ details, onClose }) { return null; }
 
 Object.assign(window, {
