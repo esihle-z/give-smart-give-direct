@@ -345,7 +345,67 @@ function DonationCard({ openGive }) {
     </div>
   );
 }
-function GiveModal({ details, onClose }) { return null; }
+function GiveModal({ details, onClose }) {
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  if (!details) return null;
+
+  const handlePay = async () => {
+    setLoading(true);
+    try {
+      const url = await buildOzowUrl({ amount: details.amount || 50, mode: details.mode });
+      window.location.href = url;
+    } catch (e) {
+      alert("Could not start payment. Please try again.");
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      className="modal-back"
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div className="modal" role="dialog" aria-modal="true">
+        <button className="x" onClick={onClose} aria-label="Close">
+          <Icon.Close size={16} />
+        </button>
+        <h3>Confirm your gift</h3>
+        <p>You're giving to Jaylin and the Nectar Road community.</p>
+        <div className="summary">
+          <span className="lbl">{details.mode === "monthly" ? "Monthly gift" : "One-time gift"}</span>
+          <span className="amt">
+            R{Number(details.amount || 0).toLocaleString()}
+            {details.mode === "monthly" ? " /mo" : ""}
+          </span>
+        </div>
+        <div className="field">
+          <label>Your name</label>
+          <input
+            placeholder="So Jaylin can thank you"
+            value={name}
+            onChange={e => setName(e.target.value)}
+          />
+        </div>
+        <div className="field">
+          <label>Email for receipt</label>
+          <input
+            placeholder="you@email.co.za"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+        </div>
+        <button className="give-btn" onClick={handlePay} disabled={loading}>
+          {loading ? "Redirecting…" : <><Icon.Lock /> Continue to payment <Icon.ArrowRight /></>}
+        </button>
+        <p className="modal-fine">
+          Sandbox mode · placeholder credentials. No real card charged.
+        </p>
+      </div>
+    </div>
+  );
+}
 
 Object.assign(window, {
   Hero, Story, HowItWorks, GiveSection, Impact, CTABand, Footer,
