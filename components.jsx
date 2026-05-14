@@ -95,7 +95,56 @@ function Hero({ openGive }) {
     </section>
   );
 }
-function Story() { return <section className="section tint" id="story" />; }
+function Story() {
+  return (
+    <section className="section tint" id="story">
+      <div className="container">
+        <div className="story-grid">
+          <div className="story-text">
+            <span className="micro">Real people. Real possibilities.</span>
+            <h2 className="h2">Help someone transform their life.</h2>
+            <p className="lede">
+              Jaylin is just one of the many kids from the Nectar Road informal settlement community, whose homes were destroyed by the recent storm. Your support helps them rebuild — and restores dignity along the way.
+            </p>
+            <p className="lede">
+              Small acts. Big change. Every gift goes directly to the essentials a recipient needs this week — not a generic fund, not a wishlist.
+            </p>
+            <a href="#how" className="smallact">
+              See how it works <Icon.ArrowRight size={14} />
+            </a>
+          </div>
+          <div className="story-card-wrap">
+            <div className="recipient-card" role="group" aria-label="Verified recipient">
+              <div className="rc-head">
+                <span className="rc-badge"><Icon.Check size={11} stroke="#0A2240" /></span>
+                Verified Support Recipient
+                <span className="rc-id">GSGD-JAYLIN-001</span>
+              </div>
+              <div className="rc-body">
+                <div className="rc-meta">
+                  <h3 className="rc-name">Jaylin Cecelia Nomdo</h3>
+                  <div className="rc-loc">Nectar Road · Cape Town</div>
+                  <div className="rc-needs">
+                    <span>This week</span>
+                    Groceries · school transport · jersey
+                  </div>
+                </div>
+                <QR />
+              </div>
+              <div className="rc-foot">
+                <span>ID 4502</span>
+                <span className="rc-brand">Give smart. Give direct.</span>
+              </div>
+            </div>
+            <p className="card-caption">
+              Tap the QR or scan from a printed card.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 function HowItWorks() { return <section className="section" id="how" />; }
 function GiveSection({ openGive }) { return <section className="section give-section" id="give" />; }
 function Impact() { return <section className="section dark" id="impact" />; }
