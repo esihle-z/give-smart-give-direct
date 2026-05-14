@@ -145,7 +145,33 @@ function Story() {
     </section>
   );
 }
-function HowItWorks() { return <section className="section" id="how" />; }
+function HowItWorks() {
+  const steps = [
+    { n: "01", t: "Scan",    d: "Scan the QR code on the card." },
+    { n: "02", t: "Donate",  d: "Choose an amount and donate securely." },
+    { n: "03", t: "Support", d: "Your gift funds essentials for them." },
+    { n: "04", t: "Redeem",  d: "They shop for what they truly need." },
+  ];
+  return (
+    <section className="section" id="how">
+      <div className="container">
+        <div className="how-head">
+          <span className="micro">How it works</span>
+          <h2 className="h2">A trusted handshake, made simple.</h2>
+        </div>
+        <div className="how-grid">
+          {steps.map(s => (
+            <div className="step" key={s.n}>
+              <span className="step-n">{s.n}</span>
+              <h3>{s.t}</h3>
+              <p>{s.d}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 function GiveSection({ openGive }) { return <section className="section give-section" id="give" />; }
 function Impact() { return <section className="section dark" id="impact" />; }
 function CTABand({ openGive }) { return <section className="cta-band" />; }
