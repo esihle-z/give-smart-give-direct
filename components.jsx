@@ -228,7 +228,30 @@ function Impact() {
     </section>
   );
 }
-function CTABand({ openGive }) { return <section className="cta-band" />; }
+function CTABand({ openGive }) {
+  return (
+    <section className="cta-band">
+      <div className="container">
+        <div className="cta-inner">
+          <div>
+            <h2>Be part of the next R40,000.</h2>
+            <p>
+              Jaylin and the Nectar Road kids are rebuilding. Help them get there.
+            </p>
+          </div>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <button className="btn btn-green btn-lg" onClick={() => openGive()}>
+              <Icon.HeartFilled /> Give now
+            </button>
+            <a className="btn btn-ghost btn-lg" href="mailto:hello@givesmartgivedirect.co.za">
+              Apply as recipient
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 function Footer() { return <footer />; }
 function DonationCard({ openGive }) {
   const presets = [10, 20, 50];
