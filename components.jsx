@@ -201,7 +201,33 @@ function GiveSection({ openGive }) {
     </section>
   );
 }
-function Impact() { return <section className="section dark" id="impact" />; }
+function Impact() {
+  const pillars = [
+    { ic: <Icon.Users size={32} />,  t: "100% to essentials",     d: "Every rand goes to the essentials a recipient needs this week." },
+    { ic: <Icon.Shield size={32} />, t: "Verified recipients",     d: "Every recipient is verified through a community partner." },
+    { ic: <Icon.Heart size={32} />,  t: "Dignity, by design",      d: "Recipients choose what they need. We don't choose for them." },
+    { ic: <Icon.Chart size={32} />,  t: "Trackable impact",        d: "Follow your gift from card to checkout to receipt." },
+  ];
+  return (
+    <section className="section dark" id="impact">
+      <div className="container">
+        <div className="impact-head">
+          <span className="micro">Together, we create impact</span>
+          <h2 className="h2">Real change, transparent and trackable.</h2>
+        </div>
+        <div className="impact-grid">
+          {pillars.map(p => (
+            <div className="pillar" key={p.t}>
+              <div className="pillar-ic">{p.ic}</div>
+              <h3>{p.t}</h3>
+              <p>{p.d}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 function CTABand({ openGive }) { return <section className="cta-band" />; }
 function Footer() { return <footer />; }
 function DonationCard({ openGive }) {
