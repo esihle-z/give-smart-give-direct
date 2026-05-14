@@ -23,31 +23,24 @@ async function buildOzowUrl({ amount, mode }) {
   return "https://pay.ozow.com/?" + params.toString();
 }
 
-// ── Decorative QR (13×13, not a real scannable code) ──────────────────────
-function QR() {
-  const pattern = [
-    "1111111 010 1111111",
-    "1000001 110 1000001",
-    "1011101 001 1011101",
-    "1011101 110 1011101",
-    "1011101 010 1011101",
-    "1000001 100 1000001",
-    "1111111 011 1111111",
-    "0000000 100 0000000",
-    "1110100 101 0110011",
-    "0011010 010 1100110",
-    "1101001 110 0011010",
-    "1111111 001 1101101",
-    "1000001 010 1100110",
-  ].map(r => r.replace(/\s/g, ""));
-  const cells = [];
-  for (let r = 0; r < 13; r++) {
-    for (let c = 0; c < 13; c++) {
-      const on = pattern[r] && pattern[r][c] === "1";
-      cells.push(<div key={r + "-" + c} className={"cell " + (on ? "" : "off")} />);
-    }
-  }
-  return <div className="qr" aria-label="QR code">{cells}</div>;
+function QR({ url = "https://givesmartgivedirect.co.za" }) {
+  const [src, setSrc] = React.useState(null);
+  React.useEffect(() => {
+    if (!window.QRious) return;
+    const qr = new window.QRious({
+      value: url,
+      size: 92,
+      foreground: "#0A2240",
+      background: "#ffffff",
+      level: "M",
+    });
+    setSrc(qr.toDataURL());
+  }, []);
+  return (
+    <div className="qr" aria-label="QR code — scan to give">
+      {src && <img src={src} alt="Scan to give at givesmartgivedirect.co.za" />}
+    </div>
+  );
 }
 
 // ── Section components (filled in later tasks) ────────────────────────────
@@ -55,36 +48,34 @@ function Hero({ openGive }) {
   return (
     <section className="hero" id="hero">
       <div className="hero-photo">
-        <img src="assets/images/jaylin.jpg" alt="Jaylin Cecelia Nomdo" />
+        <img src="assets/images/jaylin-hero.png" alt="Jaylin Cecelia Nomdo" />
         <div className="hero-photo-grade" />
       </div>
       <div className="hero-inner">
         <div className="container">
           <div className="hero-copy">
-            <span className="kicker">Person to person · giving, with proof</span>
+            <span className="kicker">A Nectar Road Story</span>
             <h1 className="h1">
-              Dignified giving. <span className="accent">Real impact.</span>
+              Scan a code. Support someone <span className="accent">directly.</span>
             </h1>
             <p className="hero-sub">
-              Scan a code. Support someone directly. Help restore dignity through essentials that matter.
+              Help restore dignity through essentials that matter &mdash; for Jaylin, and for families like hers rebuilding after the storm.
             </p>
             <div className="hero-actions">
               <button className="btn btn-green btn-lg" onClick={() => openGive()}>
-                <Icon.HeartFilled /> Give now <Icon.ArrowRight />
+                Give now <Icon.ArrowRight />
               </button>
               <a className="btn btn-ghost-light btn-lg" href="#story">
-                Read Jaylin's story
+                Read Jaylin&rsquo;s story
               </a>
             </div>
             <div className="hero-meta">
-              <span>47 supporters</span>
+              <span>R 38 240 raised of R 60 000</span>
               <span className="dot-sep" />
-              <span>R12,800 raised</span>
-              <span className="dot-sep" />
-              <span>of R40,000 goal</span>
+              <span>274 people have given</span>
             </div>
             <div className="hero-bar">
-              <div className="hero-bar-fill" style={{ width: "32%" }} />
+              <div className="hero-bar-fill" style={{ width: "64%" }} />
             </div>
           </div>
         </div>

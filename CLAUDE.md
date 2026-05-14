@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Next session: pick up here
+
+The Homepage2 redesign landed on 2026-05-13 (commits `24f6b94` → `22d0333` on `main`). Code-quality reviews surfaced a list of follow-ups that did not block the plan but should be addressed before any real-user testing.
+
+**Start by reading `docs/plans/2026-05-14-homepage2-followups.md`** — items 1-7 are the priority batch (debuggability + a11y blockers); items 8-15 are polish.
+
+A manual browser smoke test from Task 11 is also still outstanding — hard-reload `http://localhost:3333/Homepage.html` at desktop and ~375px before declaring the redesign visually verified.
+
 ## Project overview
 
 Give Smart. Give Direct. (`givesmartgivedirect.co.za`) is a South African direct-giving platform that connects donors with verified recipients via physical QR cards. The pilot is a **single self-contained HTML page** — no build step, no backend, no package manager.
