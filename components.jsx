@@ -252,7 +252,46 @@ function CTABand({ openGive }) {
     </section>
   );
 }
-function Footer() { return <footer />; }
+function Footer() {
+  return (
+    <footer>
+      <div className="container">
+        <div className="foot-top">
+          <div className="foot-brand">
+            <BrandLogo size={36} />
+            <div className="foot-wordmark">
+              <span>Give Smart</span>
+              <span className="accent">Give Direct.</span>
+            </div>
+            <p className="foot-tag">
+              Person to person giving, with proof. Cape Town, South Africa.
+            </p>
+          </div>
+          <div className="foot-col">
+            <h4>Give</h4>
+            <a href="#give">Donate now</a>
+            <a href="#story">Meet Jaylin</a>
+            <a href="#how">How it works</a>
+          </div>
+          <div className="foot-col">
+            <h4>Trust</h4>
+            <a href="#how">Verification</a>
+            <a href="#impact">Our impact</a>
+          </div>
+          <div className="foot-col">
+            <h4>Contact</h4>
+            <a href="mailto:hello@givesmartgivedirect.co.za">hello@givesmartgivedirect.co.za</a>
+            <a href="mailto:hello@givesmartgivedirect.co.za?subject=Apply%20as%20recipient">Apply as recipient</a>
+          </div>
+        </div>
+        <div className="foot-bottom">
+          <span>© 2026 Give Smart. Give Direct.</span>
+          <span>givesmartgivedirect.co.za · Section 18A receipts available</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
 function DonationCard({ openGive }) {
   const presets = [10, 20, 50];
   const [mode, setMode] = React.useState("monthly");
