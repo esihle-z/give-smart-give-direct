@@ -1,45 +1,40 @@
 const { useState, useEffect } = React;
 
-function Nav({ openGive }) {
+function Nav({ scrolled, openGive }) {
   return (
-    <header className="nav">
+    <header className={"nav " + (scrolled ? "is-scrolled" : "is-top")}>
       <div className="container nav-inner">
         <div className="brand">
-          <BrandLogo size={42} />
+          <BrandLogo size={36} />
           <div className="brand-text">
-            <span className="t1">Give smart</span>
-            <span className="t2">Give direct.</span>
-            <span className="t3">givesmartgivedirect.co.za</span>
+            <span className="t1">Give Smart</span>
+            <span className="t2">Give Direct.</span>
           </div>
         </div>
-        <div className="nav-cta">
-          <button className="btn btn-primary" onClick={openGive} id="nav-donate-btn">Donate</button>
-          <button className="menu-icon" aria-label="Menu"><Icon.Menu size={20} /></button>
-        </div>
+        <nav className="nav-links">
+          <a href="#how">How it works</a>
+          <a href="#story">Story</a>
+          <a href="#impact">Impact</a>
+        </nav>
+        <button className="btn btn-green" onClick={() => openGive()}>Donate</button>
       </div>
     </header>
   );
 }
 
 function App() {
-  const { TweaksPanel, useTweaks, TweakSection, TweakColor, TweakRadio, TweakToggle } = window;
+  const [scrolled, setScrolled] = useState(false);
+  const [giveDetails, setGive] = useState(null);
+  const [paymentMsg, setPaymentMsg] = useState(null);
 
-  const [tw, setTweak] = useTweaks(window.__TWEAK_DEFAULTS);
-  const [giveDetails, setGiveDetails] = useState(null);
-
-  // Apply tweakable accent + navy
   useEffect(() => {
-    document.documentElement.style.setProperty("--accent", tw.accent);
-    document.documentElement.style.setProperty("--navy-900", tw.navy);
-  }, [tw.accent, tw.navy]);
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-  // Hero variant: change layout slightly
   useEffect(() => {
-    document.body.classList.toggle("hero-stacked", tw.heroVariant === "stacked");
-  }, [tw.heroVariant]);
-
-  const [paymentMsg, setPaymentMsg] = React.useState(null);
-  React.useEffect(() => {
     const p = new URLSearchParams(window.location.search).get("payment");
     if (p === "success") setPaymentMsg({ type: "success", text: "Thank you! Your gift is on its way." });
     else if (p === "error") setPaymentMsg({ type: "error", text: "Payment failed. Please try again." });
@@ -48,70 +43,42 @@ function App() {
 
   const openGive = (details) => {
     if (details && typeof details === "object" && details.amount != null) {
-      setGiveDetails(details);
+      setGive(details);
     } else {
-      // From nav: open with default monthly R100
-      setGiveDetails({ amount: 100, mode: "monthly" });
+      setGive({ amount: 50, mode: "monthly" });
     }
   };
 
   return (
     <>
-      <Nav openGive={() => openGive()} />
-      <Hero tw={tw} openGive={openGive} />
-      <LiveFeed />
-      <Recipients openGive={openGive} />
+      <Nav scrolled={scrolled} openGive={openGive} />
+      <Hero openGive={openGive} />
       <Story />
       <HowItWorks />
-      <Gratitude />
+      <GiveSection openGive={openGive} />
       <Impact />
-      <CTABand open={() => openGive()} />
+      <CTABand openGive={openGive} />
       <Footer />
 
-      {giveDetails && <GiveModal details={giveDetails} onClose={() => setGiveDetails(null)} />}
+      {giveDetails && <GiveModal details={giveDetails} onClose={() => setGive(null)} />}
 
       {paymentMsg && (
         <div className={"toast toast-" + paymentMsg.type} role="alert">
-          {paymentMsg.text}
-          <button onClick={() => setPaymentMsg(null)}>✕</button>
+          <span>{paymentMsg.text}</span>
+          <button onClick={() => setPaymentMsg(null)} aria-label="Dismiss">✕</button>
         </div>
       )}
-
-      <TweaksPanel title="Tweaks">
-        <TweakSection label="Brand">
-          <TweakColor
-            label="Accent (green)"
-            value={tw.accent}
-            options={["#6DBE3F", "#0E9F6E", "#F2A540", "#D9476A"]}
-            onChange={(v) => setTweak("accent", v)}
-          />
-          <TweakColor
-            label="Primary (navy)"
-            value={tw.navy}
-            options={["#0A2240", "#0C1F36", "#173A52", "#1A2B4A"]}
-            onChange={(v) => setTweak("navy", v)}
-          />
-        </TweakSection>
-        <TweakSection label="Donation widget">
-          <TweakRadio
-            label="Amounts"
-            value={tw.amountSet}
-            options={[
-              { value: "small", label: "Small" },
-              { value: "standard", label: "Std" },
-              { value: "high", label: "High" },
-            ]}
-            onChange={(v) => setTweak("amountSet", v)}
-          />
-          <TweakToggle
-            label="Hero trust pills"
-            value={tw.showTrust}
-            onChange={(v) => setTweak("showTrust", v)}
-          />
-        </TweakSection>
-      </TweaksPanel>
     </>
   );
 }
 
-ReactDOM.createRoot(document.getElementById("app")).render(<App />);
+try {
+  ReactDOM.createRoot(document.getElementById("app")).render(<App />);
+} catch (err) {
+  const el = document.getElementById("__err");
+  if (el) {
+    el.style.display = "block";
+    el.textContent = "RENDER ERROR: " + (err && err.message) + "\n" + (err && err.stack);
+  }
+  throw err;
+}
