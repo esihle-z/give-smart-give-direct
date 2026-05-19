@@ -351,6 +351,7 @@ function DonationCard({ openGive }) {
 function GiveModal({ details, onClose }) {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [optIn, setOptIn] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   if (!details) return null;
 
@@ -399,6 +400,15 @@ function GiveModal({ details, onClose }) {
             onChange={e => setEmail(e.target.value)}
           />
         </div>
+        <label style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, color: "var(--ink-2, #41546F)", margin: "4px 0 12px", cursor: "pointer", lineHeight: 1.4 }}>
+          <input
+            type="checkbox"
+            checked={optIn}
+            onChange={e => setOptIn(e.target.checked)}
+            style={{ marginTop: 3, flexShrink: 0 }}
+          />
+          <span>Send me occasional updates about future giving opportunities. You can unsubscribe any time.</span>
+        </label>
         <button className="give-btn" onClick={handlePay} disabled={loading}>
           {loading ? "Redirecting…" : <><Icon.Lock /> Continue to payment <Icon.ArrowRight /></>}
         </button>
