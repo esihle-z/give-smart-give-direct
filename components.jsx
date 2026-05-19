@@ -265,19 +265,31 @@ function Footer() {
             <a href="#how">How it works</a>
           </div>
           <div className="foot-col">
-            <h4>Trust</h4>
+            <h4>Legal</h4>
+            <a href="/privacy.html">Privacy policy</a>
+            <a href="/terms.html">Terms of service</a>
             <a href="#how">Verification</a>
             <a href="#impact">Our impact</a>
           </div>
           <div className="foot-col">
             <h4>Contact</h4>
-            <a href="mailto:hello@givesmartgivedirect.co.za">hello@givesmartgivedirect.co.za</a>
-            <a href="mailto:hello@givesmartgivedirect.co.za?subject=Apply%20as%20recipient">Apply as recipient</a>
+            <a href="mailto:__OPERATOR_EMAIL__">__OPERATOR_EMAIL__</a>
+            <span style={{ color: "var(--ink-3, #7E8EA3)" }}>__OPERATOR_PHONE__</span>
+            <span style={{ color: "var(--ink-3, #7E8EA3)" }}>__OPERATOR_ADDRESS__</span>
           </div>
+        </div>
+        <div className="foot-disclosure" style={{ borderTop: "1px solid var(--line, #E5E3DA)", paddingTop: 16, marginTop: 24, fontSize: 13, color: "var(--ink-2, #41546F)", lineHeight: 1.5 }}>
+          <p style={{ margin: 0 }}>
+            Give Smart. Give Direct. is operated by __OPERATOR_NAME__.
+            Donations for the current pilot are received by our partner
+            non-profit, __NPO_NAME__ (NPO __NPO_NUMBER__), who is the
+            merchant of record. Section 18A tax receipts are issued by
+            the NPO on request.
+          </p>
         </div>
         <div className="foot-bottom">
           <span>© 2026 Give Smart. Give Direct.</span>
-          <span>givesmartgivedirect.co.za · Section 18A receipts available</span>
+          <span>givesmartgivedirect.co.za</span>
         </div>
       </div>
     </footer>
