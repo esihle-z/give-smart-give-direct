@@ -4,11 +4,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Next session: pick up here
 
-The Homepage2 redesign landed on 2026-05-13 (commits `24f6b94` → `22d0333` on `main`). Code-quality reviews surfaced a list of follow-ups that did not block the plan but should be addressed before any real-user testing.
+**Phase 1 (PayFast migration) is implemented and sandbox-verified, on branch `payfast-phase1`, NOT merged to `main`.** The branch is held off `main` until the partner NPO sends live PayFast credentials.
 
-**Start by reading `docs/plans/2026-05-14-homepage2-followups.md`** — items 1-7 are the priority batch (debuggability + a11y blockers); items 8-15 are polish.
+What's done (commits `35c9fb2` → `0a6ded7` on `payfast-phase1`):
 
-A manual browser smoke test from Task 11 is also still outstanding — hard-reload `http://localhost:3333/index.html` at desktop and ~375px before declaring the redesign visually verified.
+- Ozow code removed. `GiveModal.handlePay` in `components.jsx` now POSTs to a Netlify Function at `window.PAYFAST_CONFIG.signEndpoint`, receives signed PayFast fields, and auto-submits a hidden form to PayFast's hosted checkout.
+- New repo `~/Documents/My_apps/give-smart-functions/` holds two Netlify Functions (`sign-payfast`, `payfast-itn`) deployed at `https://give-smart-functions.netlify.app`. 55/55 unit tests passing.
+- End-to-end sandbox flow verified 2026-05-19 (R5 donation through full chain — see `docs/plans/2026-05-19-payfast-phase1-verification.md`).
+
+What's left — **Task 10, live cutover** in `docs/plans/2026-05-19-payfast-phase1-plan.md`:
+
+1. Wait for partner NPO to send live `merchant_id`, `merchant_key`, `passphrase` (PayFast account is mid-FICA verification).
+2. Update Netlify env vars (`PAYFAST_*`, switch `*_URL` from sandbox to `www.payfast.co.za`), drop `http://localhost:3333` from `ALLOWED_ORIGINS`, redeploy.
+3. Real R5 test → confirm funds in NPO PayFast wallet → NPO refunds the test donation.
+4. Merge `payfast-phase1` → `main` (GitHub Pages auto-deploys), tag `payfast-phase1-live`.
+
+Background reading if needed: `docs/plans/2026-05-19-payfast-research.md` (the 5-subagent research that informed the migration).
 
 ## Project overview
 
@@ -63,7 +74,15 @@ Top-level `function` declarations in a transpiled script become global automatic
 
 ### Payment flow
 
-`GiveModal.handlePay` in `components.jsx` POSTs `{ amount, name, email, newsletterOptIn }` to the Netlify Function at `window.PAYFAST_CONFIG.signEndpoint` (deployed at `https://give-smart-functions.netlify.app/.netlify/functions/sign-payfast`). The function returns `{ processUrl, fields }` where `fields` already includes a server-computed `signature`. The browser builds a hidden form and POSTs it to `processUrl` (PayFast hosted page). PayFast posts the result server-to-server to a second Netlify Function (`payfast-itn`), which verifies the signature, validates via PayFast's `/eng/query/validate` postback, and emits a `{"event":"donation",...}` JSON line to `netlify logs` (Sheets logging is deferred — see `docs/plans/2026-05-19-payfast-phase1-plan.md`). The merchant passphrase never reaches the browser.
+`GiveModal.handlePay` in `components.jsx` POSTs `{ amount, name, email, newsletterOptIn }` to the Netlify Function at `window.PAYFAST_CONFIG.signEndpoint` (deployed at `https://give-smart-functions.netlify.app/.netlify/functions/sign-payfast`). The function returns `{ processUrl, fields }` where `fields` already includes a server-computed `signature`. The browser builds a hidden form and POSTs it to `processUrl` (PayFast hosted page). PayFast posts the result server-to-server to a second Netlify Function (`payfast-itn`), which verifies the signature, validates via PayFast's `/eng/query/validate` postback, and emits a `{"event":"donation",...}` JSON line to `netlify logs` (Google Sheets logging is deferred — Apps Script deployment kept returning "Sorry, unable to open the file" despite correct permissions; see `docs/plans/2026-05-19-payfast-phase1-plan.md`). The merchant passphrase never reaches the browser.
+
+The functions live in a **separate repo** at `~/Documents/My_apps/give-smart-functions/` with its own `main` branch — that repo is auto-deployed to Netlify on push. The static site (this repo) only knows the public `signEndpoint` URL. Don't try to commingle them.
+
+#### PayFast quirks discovered the hard way (keep these in mind)
+
+1. **Sandbox merchant `10000100` has a passphrase**, despite docs saying empty. As of 2026-05-19 it's `jt7NOE43FZPn`. Set as the `PAYFAST_PASSPHRASE` env var. If sandbox signing starts failing in future, suspect PayFast rotated this.
+2. **Outbound signing omits empty fields; inbound ITN signing INCLUDES them.** PayFast's own docs are inconsistent here. Our `lib/itn-verify.mjs:verifySignature` works on the **raw POST body bytes** directly (strip `&signature=...`, append `&passphrase=...`, MD5) — do NOT parse to fields and re-encode, or empty `custom_str2..5` / `name_last` will produce a signature mismatch. Regression test for a real captured ITN lives in `tests/itn-verify.test.mjs`.
+3. **Field order is "as they appear in the form POST".** Outbound: we control order in `sign-payfast.mjs`'s `fields` object and the client form-builder iterates that same order. Inbound: handled automatically by the raw-body verifier.
 
 ### Tweaks panel
 
