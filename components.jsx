@@ -352,17 +352,56 @@ function GiveModal({ details, onClose }) {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [optIn, setOptIn] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+  const [submitting, setSubmitting] = React.useState(false);
+  const [error, setError] = React.useState("");
   if (!details) return null;
 
   const handlePay = async () => {
-    setLoading(true);
+    setError("");
+    if (!name.trim()) {
+      setError("Please enter your name.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email.");
+      return;
+    }
+
+    setSubmitting(true);
     try {
-      const url = await buildOzowUrl({ amount: details.amount || 50, mode: details.mode });
-      window.location.href = url;
-    } catch (e) {
-      alert("Could not start payment. Please try again.");
-      setLoading(false);
+      const res = await fetch(window.PAYFAST_CONFIG.signEndpoint, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          amount: details.amount || 50,
+          name: name,
+          email: email,
+          newsletterOptIn: optIn,
+        }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || "Sign failed (" + res.status + ")");
+      }
+      const data = await res.json();
+      const processUrl = data.processUrl;
+      const fields = data.fields;
+
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = processUrl;
+      Object.keys(fields).forEach(function (k) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = k;
+        input.value = fields[k];
+        form.appendChild(input);
+      });
+      document.body.appendChild(form);
+      form.submit();
+    } catch (err) {
+      setSubmitting(false);
+      setError(err.message || "Could not start payment. Please try again.");
     }
   };
 
@@ -409,8 +448,11 @@ function GiveModal({ details, onClose }) {
           />
           <span>Send me occasional updates about future giving opportunities. You can unsubscribe any time.</span>
         </label>
-        <button className="give-btn" onClick={handlePay} disabled={loading}>
-          {loading ? "Redirecting…" : <><Icon.Lock /> Continue to payment <Icon.ArrowRight /></>}
+        {error ? (
+          <div className="text-red-600 text-sm mb-2" role="alert">{error}</div>
+        ) : null}
+        <button className="give-btn" onClick={handlePay} disabled={submitting}>
+          {submitting ? "Redirecting to PayFast..." : <><Icon.Lock /> Continue to payment <Icon.ArrowRight /></>}
         </button>
         <p className="modal-fine">
           Sandbox mode · placeholder credentials. No real card charged.

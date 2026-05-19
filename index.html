@@ -975,16 +975,8 @@
     el.textContent = 'PROMISE REJECTION: ' + (e.reason && (e.reason.message || e.reason));
   });
 
-  window.GATEWAY_CONFIG = {
-    provider: "ozow",
-    siteCode: "YOUR_OZOW_SITE_CODE",
-    privateKey: "YOUR_OZOW_PRIVATE_KEY",
-    countryCode: "ZA",
-    currencyCode: "ZAR",
-    isTest: true,
-    successUrl: window.location.origin + "/?payment=success",
-    errorUrl: window.location.origin + "/?payment=error",
-    cancelUrl: window.location.origin + "/?payment=cancelled",
+  window.PAYFAST_CONFIG = {
+    signEndpoint: "https://give-smart-functions.netlify.app/.netlify/functions/sign-payfast",
   };
 </script>
 
