@@ -8,7 +8,7 @@ The Homepage2 redesign landed on 2026-05-13 (commits `24f6b94` → `22d0333` on 
 
 **Start by reading `docs/plans/2026-05-14-homepage2-followups.md`** — items 1-7 are the priority batch (debuggability + a11y blockers); items 8-15 are polish.
 
-A manual browser smoke test from Task 11 is also still outstanding — hard-reload `http://localhost:3333/Homepage.html` at desktop and ~375px before declaring the redesign visually verified.
+A manual browser smoke test from Task 11 is also still outstanding — hard-reload `http://localhost:3333/index.html` at desktop and ~375px before declaring the redesign visually verified.
 
 ## Project overview
 
@@ -20,7 +20,7 @@ Give Smart. Give Direct. (`givesmartgivedirect.co.za`) is a South African direct
 
 ```bash
 python3 -m http.server 3333
-# then open http://localhost:3333/Homepage.html
+# then open http://localhost:3333/index.html
 ```
 
 If port 3333 is busy: `lsof -ti :3333 | xargs kill -9` then restart.
@@ -37,7 +37,7 @@ This checks that all required `.agent/skills/*/SKILL.md` files exist, have valid
 
 ## Architecture
 
-`Homepage.html` uses a **custom async JSX loader** (inline `<script>` near the end of `<body>`) that `fetch`es each `.jsx` file, transpiles via `Babel.transform`, then `eval`s with `//# sourceURL=` for real stack traces. This replaces the default `<script type="text/babel" src="...">` mechanism, which sanitises errors as cross-origin "Script error." and makes blank-page debugging impossible.
+`index.html` uses a **custom async JSX loader** (inline `<script>` near the end of `<body>`) that `fetch`es each `.jsx` file, transpiles via `Babel.transform`, then `eval`s with `//# sourceURL=` for real stack traces. This replaces the default `<script type="text/babel" src="...">` mechanism, which sanitises errors as cross-origin "Script error." and makes blank-page debugging impossible.
 
 Files load in this order (matches the loader, not the script tag order):
 
@@ -54,16 +54,16 @@ Top-level `function` declarations in a transpiled script become global automatic
 
 ### Error overlay
 
-`Homepage.html` injects `<div id="__err">` and a `window.error` handler near the top of `<body>`. Any uncaught error or promise rejection shows as a red banner at the top of the page with the file, line, and stack. Keep this in until production deploy.
+`index.html` injects `<div id="__err">` and a `window.error` handler near the top of `<body>`. Any uncaught error or promise rejection shows as a red banner at the top of the page with the file, line, and stack. Keep this in until production deploy.
 
-### Key globals in `Homepage.html`
+### Key globals in `index.html`
 
 - `window.__TWEAK_DEFAULTS` — initial tweak values consumed by `useTweaks`
-- `window.GATEWAY_CONFIG` — Ozow payment config (siteCode, privateKey, isTest flag, redirect URLs)
+- `window.PAYFAST_CONFIG` — public PayFast client config; only field is `signEndpoint`, the Netlify Function URL that signs requests server-side
 
 ### Payment flow
 
-`buildOzowUrl()` in `components.jsx` builds an Ozow redirect URL client-side using Web Crypto API (`crypto.subtle.digest("SHA-512")`) for the `HashCheck` parameter. **This is sandbox-only** — for production, move hash computation to a Netlify/Vercel serverless function so the private key is never exposed in client JS.
+`GiveModal.handlePay` in `components.jsx` POSTs `{ amount, name, email, newsletterOptIn }` to the Netlify Function at `window.PAYFAST_CONFIG.signEndpoint` (deployed at `https://give-smart-functions.netlify.app/.netlify/functions/sign-payfast`). The function returns `{ processUrl, fields }` where `fields` already includes a server-computed `signature`. The browser builds a hidden form and POSTs it to `processUrl` (PayFast hosted page). PayFast posts the result server-to-server to a second Netlify Function (`payfast-itn`), which verifies the signature, validates via PayFast's `/eng/query/validate` postback, and emits a `{"event":"donation",...}` JSON line to `netlify logs` (Sheets logging is deferred — see `docs/plans/2026-05-19-payfast-phase1-plan.md`). The merchant passphrase never reaches the browser.
 
 ### Tweaks panel
 

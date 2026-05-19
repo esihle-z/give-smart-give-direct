@@ -1,28 +1,3 @@
-// ── Ozow payment URL builder (sandbox; SHA-512 hash client-side) ──────────
-async function buildOzowUrl({ amount, mode }) {
-  const cfg = window.GATEWAY_CONFIG;
-  const ref = "GSGD-" + Date.now();
-  const bankRef = "JAYLIN001-" + ref.slice(-6);
-  const hashInput = [
-    cfg.siteCode, cfg.countryCode, cfg.currencyCode,
-    amount.toFixed(2), bankRef, ref,
-    cfg.successUrl, cfg.errorUrl, cfg.cancelUrl,
-    cfg.isTest ? "true" : "false", cfg.privateKey
-  ].join("").toLowerCase();
-  const buf = await crypto.subtle.digest("SHA-512", new TextEncoder().encode(hashInput));
-  const hashCheck = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
-  const params = new URLSearchParams({
-    SiteCode: cfg.siteCode, CountryCode: cfg.countryCode,
-    CurrencyCode: cfg.currencyCode, Amount: amount.toFixed(2),
-    TransactionReference: ref, BankRef: bankRef,
-    SuccessUrl: cfg.successUrl, ErrorUrl: cfg.errorUrl,
-    CancelUrl: cfg.cancelUrl, IsTest: String(cfg.isTest),
-    HashCheck: hashCheck,
-    ...(mode === "monthly" ? { Optional1: "monthly-recurring" } : {}),
-  });
-  return "https://pay.ozow.com/?" + params.toString();
-}
-
 function QR({ url = "https://givesmartgivedirect.co.za" }) {
   const [src, setSrc] = React.useState(null);
   React.useEffect(() => {
