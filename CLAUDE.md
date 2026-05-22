@@ -4,22 +4,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Next session: pick up here
 
-**Phase 1 (PayFast migration) is implemented and sandbox-verified, on branch `payfast-phase1`, NOT merged to `main`.** The branch is held off `main` until the partner NPO sends live PayFast credentials.
+**Phase 1 PayFast cutover is LIVE on `main` as of 2026-05-22** (merge commit `004e709`, copy-cleanup `f4a4d22`). Real donations flow into Imagine Me Educare's PayFast account (`merchant_id=22052273`). The R5 live verification with the partner NPO is the only thing still outstanding from launch — once funds land in their wallet and they confirm, tag `payfast-phase1-live`.
 
-What's done (commits `35c9fb2` → `0a6ded7` on `payfast-phase1`):
+**Partner NPO:** Imagine Me Educare, CIPC-registered Non-Profit Company (Reg. No. 2025/486577/08). Contact: Robin Van Rensburg (Robinvr01@gmail.com, 0781530964). NPO public phone 0764784603 not yet used in any template.
 
-- Ozow code removed. `GiveModal.handlePay` in `components.jsx` now POSTs to a Netlify Function at `window.PAYFAST_CONFIG.signEndpoint`, receives signed PayFast fields, and auto-submits a hidden form to PayFast's hosted checkout.
-- New repo `~/Documents/My_apps/give-smart-functions/` holds two Netlify Functions (`sign-payfast`, `payfast-itn`) deployed at `https://give-smart-functions.netlify.app`. 55/55 unit tests passing.
-- End-to-end sandbox flow verified 2026-05-19 (R5 donation through full chain — see `docs/plans/2026-05-19-payfast-phase1-verification.md`).
+### Follow-ups for a future session
 
-What's left — **Task 10, live cutover** in `docs/plans/2026-05-19-payfast-phase1-plan.md`:
+1. **Reduce operator-name exposure structurally.** Robin's personal name still appears 4 times on the public site (privacy §7 POPIA Information Officer, privacy bottom small-print, terms footer, site copyright strip) — these are the legally required minimum. The proper way to reduce further is for Robin to register an entity (sole-prop trade name, CC, or Pty Ltd) and have *that* be the named operator instead of a natural person. Then a single find-and-replace updates the four spots. Worth raising with him when the pilot is stable.
+2. **NPO vs NPC question still open.** Imagine Me Educare is registered with CIPC as an NPC (Reg. No. ending `/08`). Whether they *also* hold DSD NPO registration (separate `NNN-NNN NPO` number) is unconfirmed — if they do, the site wording can shift from "Non-Profit Company" back to "registered NPO" which donors recognise more readily. Ask Robin.
+3. **Section 18A status unconfirmed.** Site copy was deliberately softened ("where approved by SARS"). If Robin confirms PBO/Section 18A approval, the GiveSection benefits list ("Transparent giving" in `components.jsx:170`) can revert to "Section 18A tax receipt" and Terms §3 can be made unconditional.
+4. **Google Sheets logging deferred** (Apps Script wouldn't deploy in Phase 1). ITN events currently log only as JSON lines to `netlify logs`. If a running ledger is needed, this is the next plumbing task.
+5. **POPIA Operator Agreement with PayFast** — legal, not technical, but should be signed.
+6. **Phase 2+ items** documented at the bottom of `docs/plans/2026-05-19-payfast-phase1-plan.md` (source-IP check, amount-match check, Onsite Payments, recurring donations).
 
-1. Wait for partner NPO to send live `merchant_id`, `merchant_key`, `passphrase` (PayFast account is mid-FICA verification).
-2. Update Netlify env vars (`PAYFAST_*`, switch `*_URL` from sandbox to `www.payfast.co.za`), drop `http://localhost:3333` from `ALLOWED_ORIGINS`, redeploy.
-3. Real R5 test → confirm funds in NPO PayFast wallet → NPO refunds the test donation.
-4. Merge `payfast-phase1` → `main` (GitHub Pages auto-deploys), tag `payfast-phase1-live`.
+### Live cutover history (for reference)
 
-Background reading if needed: `docs/plans/2026-05-19-payfast-research.md` (the 5-subagent research that informed the migration).
+- Sandbox sign-off: 2026-05-19, see `docs/plans/2026-05-19-payfast-phase1-verification.md`
+- Live env-var swap on `give-smart-functions` Netlify: 2026-05-22
+- Function redeploy with `item_name="Donation to Imagine Me Educare via Give Smart"` (commit `e9b1be9` in functions repo): 2026-05-22
+- Merge `payfast-phase1` → `main` (`004e709`): 2026-05-22
+- Operator-name copy cleanup (`f4a4d22`): 2026-05-22
+
+Background reading: `docs/plans/2026-05-19-payfast-research.md` (5-subagent research) and `docs/plans/2026-05-19-payfast-phase1-plan.md` (implementation plan).
 
 ## Project overview
 
