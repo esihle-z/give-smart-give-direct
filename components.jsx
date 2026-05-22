@@ -44,14 +44,6 @@ function Hero({ openGive }) {
                 Read Jaylin&rsquo;s story
               </a>
             </div>
-            <div className="hero-meta">
-              <span>R 38 240 raised of R 60 000</span>
-              <span className="dot-sep" />
-              <span>274 people have given</span>
-            </div>
-            <div className="hero-bar">
-              <div className="hero-bar-fill" style={{ width: "64%" }} />
-            </div>
           </div>
         </div>
       </div>
@@ -142,7 +134,7 @@ function GiveSection({ openGive }) {
   const benefits = [
     "100% goes to essentials",
     "Verified recipient",
-    "Section 18A tax receipt",
+    "Transparent giving",
     "Cancel anytime",
   ];
   return (
@@ -248,18 +240,18 @@ function Footer() {
           </div>
           <div className="foot-col">
             <h4>Contact</h4>
-            <a href="mailto:__OPERATOR_EMAIL__">__OPERATOR_EMAIL__</a>
-            <span style={{ color: "var(--ink-3, #7E8EA3)" }}>__OPERATOR_PHONE__</span>
-            <span style={{ color: "var(--ink-3, #7E8EA3)" }}>__OPERATOR_ADDRESS__</span>
+            <a href="mailto:Robinvr01@gmail.com">Robinvr01@gmail.com</a>
+            <span style={{ color: "var(--ink-3, #7E8EA3)" }}>0781530964</span>
+            <span style={{ color: "var(--ink-3, #7E8EA3)" }}>9 Pasita Street, Tygervalley</span>
           </div>
         </div>
         <div className="foot-disclosure" style={{ borderTop: "1px solid var(--line, #E5E3DA)", paddingTop: 16, marginTop: 24, fontSize: 13, color: "var(--ink-2, #41546F)", lineHeight: 1.5 }}>
           <p style={{ margin: 0 }}>
-            Give Smart. Give Direct. is operated by __OPERATOR_NAME__.
+            Give Smart. Give Direct. is operated by Robin Van Rensburg.
             Donations for the current pilot are received by our partner
-            non-profit, __NPO_NAME__ (NPO __NPO_NUMBER__), who is the
-            merchant of record. Section 18A tax receipts are issued by
-            the NPO on request.
+            Non-Profit Company, Imagine Me Educare (Registration No. 2025/486577/08),
+            who is the merchant of record. Where applicable, Section 18A
+            tax-deductible receipts are issued by the NPC on request.
           </p>
         </div>
         <div className="foot-bottom">
