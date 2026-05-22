@@ -247,15 +247,16 @@ function Footer() {
         </div>
         <div className="foot-disclosure" style={{ borderTop: "1px solid var(--line, #E5E3DA)", paddingTop: 16, marginTop: 24, fontSize: 13, color: "var(--ink-2, #41546F)", lineHeight: 1.5 }}>
           <p style={{ margin: 0 }}>
-            Give Smart. Give Direct. is operated by Robin Van Rensburg.
-            Donations for the current pilot are received by our partner
-            Non-Profit Company, Imagine Me Educare (Registration No. 2025/486577/08),
-            who is the merchant of record. Where applicable, Section 18A
-            tax-deductible receipts are issued by the NPC on request.
+            All donations made through this site are received by{" "}
+            <strong>Imagine Me Educare</strong>, a registered Non-Profit
+            Company (Registration No. 2025/486577/08), which acts as the
+            merchant of record. Section 18A tax-deductible receipts, where
+            applicable, are issued by Imagine Me Educare on request.
           </p>
         </div>
         <div className="foot-bottom">
           <span>© 2026 Give Smart. Give Direct.</span>
+          <span>Operated by Robin Van Rensburg</span>
           <span>givesmartgivedirect.co.za</span>
         </div>
       </div>
